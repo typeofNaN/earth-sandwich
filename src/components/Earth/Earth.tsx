@@ -98,7 +98,7 @@ function Globe() {
       Texture,
       Texture,
     ]
-    const anisotropy = Math.min(8, gl.capabilities.getMaxAnisotropy())
+    const anisotropy = Math.min(16, gl.capabilities.getMaxAnisotropy())
     copies[0].colorSpace = SRGBColorSpace
     copies[1].colorSpace = NoColorSpace
     copies[2].colorSpace = NoColorSpace
@@ -133,7 +133,7 @@ function Globe() {
         <meshPhongMaterial
           map={day}
           normalMap={normal}
-          normalScale={[0.72, 0.72]}
+          normalScale={[0.48, 0.48]}
           specularMap={specular}
           specular={new Color('#6aa9c8')}
           shininess={18}
@@ -159,7 +159,7 @@ function Globe() {
         <meshPhongMaterial
           map={cloudsMap}
           transparent
-          opacity={isXray ? 0.08 : 0.42}
+          opacity={isXray ? 0.06 : 0.26}
           depthWrite={false}
           shininess={4}
         />
@@ -216,7 +216,7 @@ export function Earth() {
 
   return (
     <Canvas
-      dpr={[1, 1.5]}
+      dpr={[1, 2]}
       camera={{ position: [0, 0.18, 5.65], fov: 38 }}
       gl={{ antialias: true, alpha: false, powerPreference: 'high-performance' }}
       onCreated={({ gl }) => {
