@@ -1,33 +1,35 @@
 import { LocateFixed } from 'lucide-react'
 import { useState } from 'react'
+import { useTranslation } from '../../i18n/useTranslation'
 import { useEarthStore } from '../../store/earthStore'
-import { isValidLatLng, roundCoordinate } from '../../utils/geo'
 import { parseCoordinate } from '../../utils/coordinates'
+import { isValidLatLng, roundCoordinate } from '../../utils/geo'
 import { Button } from '../ui/Button'
 
 export function CoordinateInput() {
   const selected = useEarthStore((state) => state.selectedLocation)
   const selectLocation = useEarthStore((state) => state.selectLocation)
+  const { t } = useTranslation()
   const [lat, setLat] = useState(selected?.lat.toString() ?? '')
   const [lng, setLng] = useState(selected?.lng.toString() ?? '')
-  const [error, setError] = useState('')
+  const [error, setError] = useState(false)
 
   function submit() {
     const parsedLat = parseCoordinate(lat)
     const parsedLng = parseCoordinate(lng)
     if (parsedLat === null || parsedLng === null || !isValidLatLng(parsedLat, parsedLng)) {
-      setError('Latitude must be -90 to 90. Longitude must be -180 to 180.')
+      setError(true)
       return
     }
-    setError('')
+    setError(false)
     selectLocation({ lat: roundCoordinate(parsedLat, 4), lng: roundCoordinate(parsedLng, 4) })
   }
 
   return (
     <div className="space-y-3">
       <div className="grid grid-cols-2 gap-2">
-        <label className="space-y-1 text-[10px] uppercase tracking-[0.18em] text-white/45">
-          Latitude
+        <label className="space-y-1 text-[10px] uppercase tracking-[0.12em] text-white/45">
+          {t.latitude}
           <input
             value={lat}
             onChange={(event) => setLat(event.target.value)}
@@ -36,8 +38,8 @@ export function CoordinateInput() {
             inputMode="decimal"
           />
         </label>
-        <label className="space-y-1 text-[10px] uppercase tracking-[0.18em] text-white/45">
-          Longitude
+        <label className="space-y-1 text-[10px] uppercase tracking-[0.12em] text-white/45">
+          {t.longitude}
           <input
             value={lng}
             onChange={(event) => setLng(event.target.value)}
@@ -47,10 +49,10 @@ export function CoordinateInput() {
           />
         </label>
       </div>
-      {error && <p className="text-xs text-rose-200">{error}</p>}
-      <Button onClick={submit} aria-label="Go to typed coordinates" className="w-full">
+      {error && <p className="text-xs text-rose-200">{t.coordinateError}</p>}
+      <Button onClick={submit} aria-label={t.goAria} className="w-full">
         <LocateFixed size={15} />
-        Go
+        {t.go}
       </Button>
     </div>
   )

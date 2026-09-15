@@ -3,6 +3,7 @@ import type { ThreeEvent } from '@react-three/fiber'
 import { Suspense, useMemo, useRef, useState } from 'react'
 import { AdditiveBlending, Mesh, MeshStandardMaterial } from 'three'
 import { useEarthStore } from '../../store/earthStore'
+import { useTranslation } from '../../i18n/useTranslation'
 import { EARTH_RADIUS, vector3ToLatLng } from '../../utils/geo'
 import { Atmosphere } from './Atmosphere'
 import { EarthBeam } from './EarthBeam'
@@ -132,10 +133,11 @@ function Scene() {
 
 export function Earth() {
   const [webglLost, setWebglLost] = useState(false)
+  const { t } = useTranslation()
   if (webglLost) {
     return (
       <div className="grid h-full place-items-center text-center text-sm text-white/70">
-        WebGL paused. Refresh to restore the planet.
+        {t.webglPaused}
       </div>
     )
   }
