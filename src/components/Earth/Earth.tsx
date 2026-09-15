@@ -120,6 +120,7 @@ function Globe() {
   })
 
   function handleClick(event: ThreeEvent<MouseEvent>) {
+    if (event.delta > 4) return
     if (!['idle', 'selected', 'result'].includes(animationState)) return
     event.stopPropagation()
     selectLocation(vector3ToLatLng(event.point))
