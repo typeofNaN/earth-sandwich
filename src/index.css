@@ -3,6 +3,8 @@
 :root {
   font-family:
     Inter,
+    'PingFang SC',
+    'Microsoft YaHei',
     ui-sans-serif,
     system-ui,
     -apple-system,
@@ -10,7 +12,7 @@
     'Segoe UI',
     sans-serif;
   color: #fff;
-  background: #050505;
+  background: #030405;
   font-synthesis: none;
   text-rendering: geometricPrecision;
   -webkit-font-smoothing: antialiased;
@@ -20,22 +22,184 @@
 * {
   box-sizing: border-box;
 }
+
 html {
-  background: #050505;
+  background: #030405;
 }
+
 body {
   margin: 0;
   min-width: 320px;
   min-height: 100dvh;
   overflow-x: hidden;
 }
+
 button,
 input {
   font: inherit;
 }
-::selection {
-  background: rgba(103, 232, 249, 0.28);
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
 }
+
+::selection {
+  background: rgba(125, 211, 252, 0.24);
+}
+
+.star-vignette {
+  background-image:
+    radial-gradient(circle at 18% 28%, rgba(255, 255, 255, 0.35) 0 0.6px, transparent 0.8px),
+    radial-gradient(circle at 72% 16%, rgba(163, 221, 255, 0.3) 0 0.5px, transparent 0.7px),
+    radial-gradient(circle at 84% 78%, rgba(255, 255, 255, 0.24) 0 0.5px, transparent 0.7px);
+  background-size:
+    181px 181px,
+    257px 257px,
+    311px 311px;
+  box-shadow: inset 0 0 180px 70px #030405;
+  opacity: 0.5;
+}
+
+.earth-reticle {
+  border: 1px solid rgba(255, 255, 255, 0.055);
+  box-shadow:
+    0 0 0 48px rgba(255, 255, 255, 0.012),
+    0 0 0 96px rgba(255, 255, 255, 0.009);
+}
+
+.earth-reticle::before,
+.earth-reticle::after {
+  position: absolute;
+  content: '';
+  pointer-events: none;
+}
+
+.earth-reticle::before {
+  inset: -13px 50%;
+  width: 1px;
+  background: linear-gradient(
+    to bottom,
+    rgba(125, 211, 252, 0.3) 0 8px,
+    transparent 8px calc(100% - 8px),
+    rgba(125, 211, 252, 0.3) calc(100% - 8px)
+  );
+}
+
+.earth-reticle::after {
+  inset: 50% -13px;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    rgba(125, 211, 252, 0.3) 0 8px,
+    transparent 8px calc(100% - 8px),
+    rgba(125, 211, 252, 0.3) calc(100% - 8px)
+  );
+}
+
+.coordinate-readout {
+  display: flex;
+  min-height: 36px;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 2px;
+  background: rgba(3, 4, 5, 0.72);
+  padding: 0 14px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  color: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(14px);
+}
+
+.coordinate-readout > span {
+  width: 5px;
+  height: 5px;
+  flex: none;
+  border-radius: 50%;
+  box-shadow: 0 0 8px currentColor;
+}
+
+.instrument-panel {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+  background: rgba(4, 6, 8, 0.78);
+  box-shadow:
+    0 24px 70px rgba(0, 0, 0, 0.48),
+    inset 0 1px rgba(255, 255, 255, 0.025);
+  backdrop-filter: blur(22px) saturate(115%);
+}
+
+.result-panel {
+  border-color: rgba(139, 233, 255, 0.17);
+  box-shadow:
+    0 24px 80px rgba(0, 0, 0, 0.55),
+    0 0 55px rgba(63, 180, 213, 0.07);
+}
+
+.marker-label {
+  min-width: 130px;
+  border-left: 1px solid rgba(160, 238, 255, 0.7);
+  background: rgba(2, 5, 7, 0.72);
+  padding: 7px 10px;
+  color: white;
+  backdrop-filter: blur(10px);
+}
+
+.marker-label span {
+  display: block;
+  margin-bottom: 3px;
+  font-size: 7px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(200, 245, 255, 0.55);
+}
+
+.marker-label strong {
+  display: block;
+  white-space: nowrap;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 9px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.loading-orbit {
+  position: relative;
+}
+
+.loading-orbit span {
+  position: absolute;
+  top: -3px;
+  left: 50%;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #d6f7ff;
+  box-shadow: 0 0 16px rgba(125, 211, 252, 0.85);
+  animation: orbit 1.6s linear infinite;
+  transform-origin: 0 31px;
+}
+
+@keyframes orbit {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 767px) {
+  .star-vignette {
+    box-shadow: inset 0 0 90px 25px #030405;
+  }
+
+  .earth-reticle {
+    box-shadow:
+      0 0 0 28px rgba(255, 255, 255, 0.01),
+      0 0 0 56px rgba(255, 255, 255, 0.007);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

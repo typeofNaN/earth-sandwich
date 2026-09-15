@@ -1,7 +1,8 @@
 import { Html } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
 import { useMemo, useRef } from 'react'
-import { Group } from 'three'
+import { AdditiveBlending, Group } from 'three'
+import { useTranslation } from '../../i18n/useTranslation'
 import type { LatLng } from '../../types/geo'
 import { formatLatLng } from '../../utils/coordinates'
 import { EARTH_RADIUS, latLngToVector3 } from '../../utils/geo'
@@ -10,33 +11,50 @@ type Props = { location: LatLng; tone: 'start' | 'antipode'; visible?: boolean }
 
 export function EarthMarker({ location, tone, visible = true }: Props) {
   const ref = useRef<Group>(null)
+  const { t } = useTranslation()
   const position = useMemo(
-    () => latLngToVector3(location.lat, location.lng, EARTH_RADIUS + 0.035),
+    () => latLngToVector3(location.lat, location.lng, EARTH_RADIUS + 0.045),
     [location],
   )
+
   useFrame(({ clock }) => {
     if (!ref.current) return
-    const pulse = 1 + Math.sin(clock.elapsedTime * 4) * 0.12
+    const pulse = 1 + Math.sin(clock.elapsedTime * 3.2) * 0.1
     ref.current.scale.setScalar(pulse)
   })
+
   if (!visible) return null
-  const color = tone === 'start' ? '#f8fafc' : '#67e8f9'
+  const color = tone === 'start' ? '#f8fafc' : '#72e8ff'
+
   return (
     <group ref={ref} position={position} lookAt={[0, 0, 0]}>
       <mesh>
-        <sphereGeometry args={[0.035, 24, 24]} />
-        <meshBasicMaterial color={color} />
+        <sphereGeometry args={[0.026, 20, 20]} />
+        <meshBasicMaterial color={color} toneMapped={false} />
       </mesh>
-      <mesh>
-        <torusGeometry args={[0.08, 0.004, 8, 48]} />
-        <meshBasicMaterial color={color} transparent opacity={0.72} />
-      </mesh>
-      <pointLight color={color} intensity={1.8} distance={1} />
-      <Html center distanceFactor={9} className="pointer-events-none select-none">
-        <div className="rounded border border-white/15 bg-black/40 px-2 py-1 font-mono text-[10px] text-white/85 shadow-[0_0_24px_rgba(103,232,249,0.22)] backdrop-blur-md">
-          {tone === 'start' ? 'START' : 'OTHER SIDE'}
-          <br />
-          {formatLatLng(location, 'decimal')}
+      {[0.07, 0.105].map((radius, index) => (
+        <mesh key={radius}>
+          <torusGeometry args={[radius, index === 0 ? 0.005 : 0.0025, 8, 64]} />
+          <meshBasicMaterial
+            color={color}
+            transparent
+            opacity={index === 0 ? 0.85 : 0.34}
+            depthWrite={false}
+            blending={AdditiveBlending}
+            toneMapped={false}
+          />
+        </mesh>
+      ))}
+      <pointLight color={color} intensity={2.4} distance={0.8} decay={2} />
+      <Html
+        center
+        distanceFactor={8.5}
+        position={[0, 0.2, 0]}
+        className="pointer-events-none select-none"
+      >
+        <div className="marker-label">
+          <span>{tone === 'start' ? t.startedHere : t.otherSide}</span>
+          <strong>{formatLatLng(location, 'decimal')}</strong>
         </div>
       </Html>
     </group>

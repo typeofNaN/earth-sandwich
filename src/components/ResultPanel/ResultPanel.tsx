@@ -46,42 +46,59 @@ export function ResultPanel() {
   }
 
   return (
-    <section className="pointer-events-auto w-full max-w-sm space-y-4 rounded-lg border border-cyan-100/15 bg-black/45 p-5 text-white shadow-[0_0_80px_rgba(34,211,238,0.12)] backdrop-blur-xl">
-      <p className="text-[10px] uppercase tracking-[0.22em] text-cyan-100/65">{t.otherSide}</p>
-      <div className="space-y-3 font-mono text-sm">
-        <div>
-          <p className="text-[10px] uppercase tracking-[0.14em] text-white/40">{t.startedHere}</p>
-          <p>{formatLatLng(selected, coordinateFormat)}</p>
+    <section className="instrument-panel result-panel pointer-events-auto w-full overflow-hidden">
+      <div className="border-b border-white/[0.08] px-5 py-4">
+        <div className="mb-2 flex items-center gap-2">
+          <span className="h-1.5 w-1.5 rounded-full bg-cyan-200 shadow-[0_0_10px_rgba(165,243,252,0.9)]" />
+          <p className="text-[9px] uppercase tracking-[0.24em] text-cyan-100/55">{t.otherSide}</p>
         </div>
-        <div className="text-center text-white/45">
-          ↓<br />
-          <span className="text-base text-white">{EARTH_DIAMETER_KM.toLocaleString()} km</span>
-          <br />
-          {t.throughEarth.toUpperCase()}
-          <br />↓
-        </div>
+        <p className="font-mono text-base text-cyan-50">
+          {formatLatLng(antipode, coordinateFormat)}
+        </p>
+      </div>
+
+      <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-3 px-5 py-5">
         <div>
-          <p className="text-[10px] uppercase tracking-[0.14em] text-white/40">{t.otherSide}</p>
-          <p className="text-cyan-100">{formatLatLng(antipode, coordinateFormat)}</p>
+          <p className="mb-1 text-[8px] uppercase tracking-[0.14em] text-white/28">
+            {t.startedHere}
+          </p>
+          <p className="font-mono text-[10px] leading-4 text-white/60">
+            {formatLatLng(selected, coordinateFormat)}
+          </p>
+        </div>
+        <div className="grid place-items-center">
+          <span className="h-5 w-px bg-gradient-to-b from-transparent to-cyan-200/50" />
+          <span className="my-1 h-2 w-2 rounded-full border border-cyan-100/70" />
+          <span className="h-5 w-px bg-gradient-to-b from-cyan-200/50 to-transparent" />
+        </div>
+        <div className="text-right">
+          <p className="font-mono text-sm text-white/90">{EARTH_DIAMETER_KM.toLocaleString()} km</p>
+          <p className="mt-1 text-[8px] uppercase tracking-[0.12em] text-white/28">
+            {t.throughEarth}
+          </p>
         </div>
       </div>
-      <div className="rounded-md border border-white/10 bg-white/[0.04] p-3">
-        <p className="text-xs uppercase tracking-[0.14em] text-white/50">
-          {rare ? t.landToLand : pathLabel}
-        </p>
-        <p className="mt-1 text-sm text-white/78">
+
+      <div className="mx-3 border border-white/[0.08] bg-white/[0.025] px-3 py-3">
+        <div className="flex items-center justify-between gap-3">
+          <p className="font-mono text-[9px] uppercase tracking-[0.16em] text-white/42">
+            {rare ? t.landToLand : pathLabel}
+          </p>
+          {rare && <span className="text-[9px] text-cyan-100/55">{t.rareOne}</span>}
+        </div>
+        <p className="mt-2 text-xs text-white/68">
           {antipodeSurface?.kind === 'land' ? t.emergeNear : t.emergeIn}
           {surfaceName(antipodeSurface, t)}
         </p>
-        {rare && <p className="mt-1 text-xs text-cyan-100/70">{t.rareOne}</p>}
       </div>
-      <div className="grid grid-cols-2 gap-2">
+
+      <div className="grid grid-cols-2 gap-2 p-3">
         <Button onClick={copy}>
-          <Copy size={15} />
+          <Copy size={14} />
           {copyLabel}
         </Button>
         <Button onClick={reset}>
-          <RotateCcw size={15} />
+          <RotateCcw size={14} />
           {t.tryAnother}
         </Button>
       </div>
