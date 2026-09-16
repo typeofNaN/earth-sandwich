@@ -3,6 +3,19 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
+  "author": {
+    "name": "typeofNaN",
+    "url": "https://github.com/typeofNaN",
+    "email": "dmdefine6@gmail.com"
+  },
+  "homepage": "https://github.com/typeofNaN/earth-sandwich",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/typeofNaN/earth-sandwich.git"
+  },
+  "bugs": {
+    "url": "https://github.com/typeofNaN/earth-sandwich/issues"
+  },
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
